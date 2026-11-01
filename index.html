@@ -220,6 +220,34 @@
             
         }
 
+        .game-panel {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: rgb(36, 0, 49);
+        }
+
+        .game-board {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            height: 190px;
+            margin: 0 auto;
+            border: 3px solid rgb(47, 96, 82);
+            background-image: url(https://i.pinimg.com/originals/3c/36/c0/3c36c04cf11c44121b2eab10b4d6128c.gif);
+            background-size: cover;
+        }
+
+        #star {
+            position: absolute;
+            border: 0;
+            background: transparent;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+
+    
+
         .footer{
             width: 900px;
             height: 50px ;
@@ -375,7 +403,14 @@
         </div>
 
         <div class=" box4 "  > 
-      
+              <div class="game-panel">
+                <h2>Fange den Stern <img src="https://pixels.crd.co/assets/images/gallery62/e1f1be15.gif?v=29416114" > </h2> 
+                <p>Punkte: <span id="score">0</span> | Zeit: <span id="time">20</span></p>
+                <button id="start">Spiel starten</button>
+                <div class="game-board">
+                <button id="star" aria-label="Stern anklicken" hidden> <img src="https://64.media.tumblr.com/208b081268d7aae01747366db8cb2b4f/34d6f0d38cc6f7df-5c/s75x75_c1/8d420f75b420f9234af2dd0ca8208305caee3241.gifv" >  </button>
+                </div>
+            </div>
 
         </div>
 
@@ -383,7 +418,55 @@
 
 </main>
 
-       
+        <script>
+    const startButton = document.querySelector("#start");
+    const star = document.querySelector("#star");
+    const board = document.querySelector(".game-board");
+    const scoreDisplay = document.querySelector("#score");
+    const timeDisplay = document.querySelector("#time");
+
+    let score = 0;
+    let timeLeft = 20;
+    let timer;
+
+    function moveStar() {
+        const maxX = board.clientWidth - star.offsetWidth;
+        const maxY = board.clientHeight - star.offsetHeight;
+
+        star.style.left = `${Math.random() * maxX}px`;
+        star.style.top = `${Math.random() * maxY}px`;
+    }
+
+    startButton.addEventListener("click", () => {
+        clearInterval(timer);
+        score = 0;
+        timeLeft = 20;
+        scoreDisplay.textContent = score;
+        timeDisplay.textContent = timeLeft;
+        star.hidden = false;
+        startButton.disabled = true;
+        moveStar();
+
+        timer = setInterval(() => {
+            timeLeft--;
+            timeDisplay.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                star.hidden = true;
+                startButton.disabled = false;
+                startButton.textContent = `Du hast ${score} Punkte – Nochmal spielen`;
+            }
+        }, 1000);
+    });
+
+    star.addEventListener("click", () => {
+        score++;
+        scoreDisplay.textContent = score;
+        moveStar();
+    });
+    </script>
+
 
 
 
